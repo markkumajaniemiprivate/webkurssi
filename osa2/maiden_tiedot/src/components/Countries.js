@@ -19,7 +19,16 @@ const ShowCountry = ({ country }) => {
   )
 }
 
-const SelectCountry = ({ countries, setFilter }) => {
+const SelectCountry = ({ countries, setCountriesToShow }) => {
+
+  //https://stackoverflow.com/questions/51042381/react-how-to-pass-an-argument-to-an-event-handler
+  const showFromButton = (event) => {
+    event.preventDefault()
+    console.log('show', event.target.dataset.key)
+    let new_filter = event.target.dataset.key
+    let new_countries = countries.filter(country => country.name.toLowerCase().includes(new_filter.toLowerCase()))
+    setCountriesToShow(new_countries)
+  }
 
   if (countries.length === 1) {
     return (
@@ -40,34 +49,25 @@ const SelectCountry = ({ countries, setFilter }) => {
     )
   }
 
-  //https://stackoverflow.com/questions/51042381/react-how-to-pass-an-argument-to-an-event-handler
-  const showFromButton = (event) => {
-    event.preventDefault()
-    console.log('show',event.target.dataset.key)
-    setFilter(event.target.dataset.key)
-  }
-
   return (
-      <div>
-        {
-          countries.map((country) =>
-            <div key={country.name} >
-              {country.name}
-              <button type="button" data-key={country.name} onClick={showFromButton} >Show</button>
-            </div>)
-        }
-      </div>
+    <div>
+      {
+        countries.map((country) =>
+          <div key={country.name} >
+            {country.name}
+            <button type="button" data-key={country.name} onClick={showFromButton} >Show</button>
+          </div>)
+      }
+    </div>
   )
 
 }
 
-const Countries = ({ countries, filter, setFilter }) => {
-
-  const countriesToShow = countries.filter(country => country.name.toLowerCase().includes(filter.toLowerCase()))
+const Countries = ({ countries, setCountriesToShow }) => {
 
   return (
     <div>
-      <SelectCountry countries={countriesToShow} setFilter={setFilter} />
+      <SelectCountry countries={countries} setCountriesToShow={setCountriesToShow} />
     </div>
   )
 
