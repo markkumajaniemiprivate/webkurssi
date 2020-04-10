@@ -11,10 +11,13 @@ const Persons = ({ persons, setPersons, filter }) => {
   const removePerson = (event) => {
     event.preventDefault()
     console.log('delete', event.target.dataset.key)
-    let person_to_remove = persons.find(person => person.name === event.target.dataset.key)
-    personService.remove(person_to_remove).then(() => {
-      personService.getAll().then(data => setPersons(data))
-    })
+
+    if (window.confirm(`Delete ${event.target.dataset.key} ?`)) {
+      let person_to_remove = persons.find(person => person.name === event.target.dataset.key)
+      personService.remove(person_to_remove).then(() => {
+        personService.getAll().then(data => setPersons(data))
+      })
+    }
   }
 
   return (
