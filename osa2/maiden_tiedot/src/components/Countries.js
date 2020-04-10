@@ -1,4 +1,5 @@
 import React from 'react'
+import Weather from './Weather'
 
 const ShowCountry = ({ country }) => {
 
@@ -15,9 +16,11 @@ const ShowCountry = ({ country }) => {
       )}
       <p>  </p>
       <img src={country.flag} alt='flag' height='50' ></img>
+      <Weather country={country} />
     </div>
   )
 }
+
 
 const SelectCountry = ({ countries, setCountriesToShow }) => {
 
@@ -31,6 +34,7 @@ const SelectCountry = ({ countries, setCountriesToShow }) => {
   }
 
   if (countries.length === 1) {
+
     return (
       <div>
         {
