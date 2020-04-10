@@ -1,4 +1,5 @@
 import React from 'react'
+import personService from '../services/persons'
 
 const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNewNumber }) => {
 
@@ -19,9 +20,11 @@ const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNe
       window.alert(`${newName} is already added to the phonebook`)
     }
     else {
-      setPersons(persons.concat({ name: newName, number: newNumber }))
-      setNewName('')
-      setNewNumber('')
+      personService.create({ name: newName, number: newNumber }).then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
     }
   }
 
