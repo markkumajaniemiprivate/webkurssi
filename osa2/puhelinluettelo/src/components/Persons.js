@@ -1,7 +1,7 @@
 import React from 'react'
 import personService from '../services/persons'
 
-const Persons = ({ persons, setPersons, filter }) => {
+const Persons = ({ persons, setPersons, filter, setNotif }) => {
 
   const personsToShow = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
@@ -17,6 +17,7 @@ const Persons = ({ persons, setPersons, filter }) => {
       personService.remove(person_to_remove).then(() => {
         personService.getAll().then(data => setPersons(data))
       })
+      setNotif(`Deleted ${event.target.dataset.key}`)
     }
   }
 

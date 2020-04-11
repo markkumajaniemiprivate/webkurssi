@@ -1,7 +1,7 @@
 import React from 'react'
 import personService from '../services/persons'
 
-const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNewNumber }) => {
+const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNewNumber, setNotif }) => {
 
   const handleNewName = (event) => {
     console.log('new name')
@@ -21,6 +21,7 @@ const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNe
         console.log('addName', {name: newName})
         const person_to_replace = persons.find((person) => person.name === newName)
         personService.update(person_to_replace, newNumber).then(() => personService.getAll().then(data => setPersons(data)))
+        setNotif(`Updated ${newName}`)
       }
     }
     else {
@@ -28,6 +29,7 @@ const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNe
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
+        setNotif(`Added ${newName}`)
       })
     }
   }
