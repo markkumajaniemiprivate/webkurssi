@@ -1,7 +1,7 @@
 import React from 'react'
 import personService from '../services/persons'
 
-const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNewNumber, setNotif }) => {
+const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNewNumber, setNotif, setError }) => {
 
   const handleNewName = (event) => {
     console.log('new name')
@@ -20,8 +20,15 @@ const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNe
       if (window.confirm(`${newName} is already added to the phonebook, replace the old number with the new one?`)) {
         console.log('addName', {name: newName})
         const person_to_replace = persons.find((person) => person.name === newName)
-        personService.update(person_to_replace, newNumber).then(() => personService.getAll().then(data => setPersons(data)))
-        setNotif(`Updated ${newName}`)
+        personService.update(person_to_replace, newNumber)
+        .then(() => {
+          personService.getAll().then(data => setPersons(data))
+          setNotif(`Updated ${newName}`)
+        })
+        .catch(() => {
+          personService.getAll().then(data => setPersons(data))
+          setError(`Information of ${newName} is already removed from the server`)
+        })        
       }
     }
     else {

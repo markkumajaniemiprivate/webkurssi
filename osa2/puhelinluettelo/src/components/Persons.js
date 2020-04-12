@@ -1,7 +1,7 @@
 import React from 'react'
 import personService from '../services/persons'
 
-const Persons = ({ persons, setPersons, filter, setNotif }) => {
+const Persons = ({ persons, setPersons, filter, setNotif, setError }) => {
 
   const personsToShow = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
@@ -14,10 +14,18 @@ const Persons = ({ persons, setPersons, filter, setNotif }) => {
 
     if (window.confirm(`Delete ${event.target.dataset.key} ?`)) {
       let person_to_remove = persons.find(person => person.name === event.target.dataset.key)
-      personService.remove(person_to_remove).then(() => {
-        personService.getAll().then(data => setPersons(data))
-      })
-      setNotif(`Deleted ${event.target.dataset.key}`)
+      personService.remove(person_to_remove)
+        .then(() => {
+          console.log('deleted', person_to_remove)
+          setNotif(`Deleted ${person_to_remove.name}`)
+          personService.getAll().then(data => {
+            setPersons(data)
+          })
+        })
+        .catch(() => {
+          setError(`Information of ${person_to_remove.name} is already removed from the server`)
+          personService.getAll().then(data => setPersons(data))
+        })
     }
   }
 
